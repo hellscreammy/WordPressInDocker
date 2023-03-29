@@ -1,0 +1,52 @@
+version: '2.4'
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    hostname: nginx
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - ./html:/var/www/html
+    ports:
+      - "80:80"
+    links:
+      - php-apache
+    restart:
+      always
+    networks:
+      lemp-network:
+        ipv4_address: 172.16.0.4
+
+  php-apache: 
+    container_name: php-apache
+    hostname: php-apache
+    image: visionappscz/apache-php
+    volumes:
+      - ./apache:/etc/apache2/sites-enabled
+      - ./html:/var/www/html
+    restart: always
+    networks:
+      lemp-network:
+        ipv4_address: 172.16.0.3
+
+  mysql:
+    image: mysql/mysql-server:latest
+    container_name: mysql
+    hostname: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "password"
+      MYSQL_DATABASE: "wordpressdb"
+      MYSQL_USER: "wordpress"
+      MYSQL_PASSWORD: "passw0rd"
+    ports:
+      - "3306:3306"
+    networks:
+      lemp-network:
+        ipv4_address: 172.16.0.5
+
+networks:
+  lemp-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.0.0/24
