@@ -1,21 +1,21 @@
 version: '2.4'
 services:
-  nginx:
-    image: nginx:latest
-    container_name: nginx
-    hostname: nginx
-    volumes:
-      - ./nginx:/etc/nginx/conf.d
-      - ./html:/var/www/html
-    ports:
-      - "80:80"
-    links:
-      - php-apache
-    restart:
-      always
-    networks:
-      lemp-network:
-        ipv4_address: 172.16.0.4
+#  nginx:
+#    image: nginx:latest
+#    container_name: nginx
+#    hostname: nginx
+#    volumes:
+#      - ./nginx:/etc/nginx/conf.d
+#      - ./html:/var/www/html
+#    ports:
+#      - "80:80"
+#    links:
+#      - php-apache
+#    restart:
+#      always
+#    networks:
+#      lemp-network:
+#        ipv4_address: 172.16.0.4
 
   php-apache: 
     container_name: php-apache
@@ -24,6 +24,8 @@ services:
     volumes:
       - ./apache:/etc/apache2/sites-enabled
       - ./html:/var/www/html
+    ports:
+      - "80:80"
     restart: always
     networks:
       lemp-network:
